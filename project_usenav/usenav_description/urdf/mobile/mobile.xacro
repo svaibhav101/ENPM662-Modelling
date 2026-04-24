@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<robot name="usenav" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:property name="BASE_LENGTH" value="0.6" />
+  <xacro:property name="BASE_WIDTH" value="0.4" />
+  <xacro:property name="BASE_HEIGHT" value="0.2" />
+
+  <xacro:property name="WHEEL_RADIUS" value="0.1" />
+  <xacro:property name="WHEEL_LENGTH" value="0.05" />
+
+  <xacro:property name="SCAN_RADIUS" value="0.1" />
+  <xacro:property name="SCAN_LENGTH" value="0.04" />
+
+  <xacro:property name="BASE_MASS" value="5.0" />
+  <xacro:property name="WHEEL_MASS" value="1.0" />
+  <xacro:property name="CASTER_MASS" value="0.5" />
+  <xacro:property name="SCAN_MASS" value="0.2" />
+
+  <xacro:macro name="wheel" params="name y_sign">
+    <link name="${name}_wheel">
+      <visual>
+        <geometry>
+          <cylinder radius="${WHEEL_RADIUS}" length="${WHEEL_LENGTH}" />
+        </geometry>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+        <material name="grey" />
+      </visual>
+
+      <collision>
+        <geometry>
+          <cylinder radius="${WHEEL_RADIUS}" length="${WHEEL_LENGTH}" />
+        </geometry>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      </collision>
+
+      <xacro:cylinder_inertia m="${WHEEL_MASS}" r="${INERTIA_MULTIPLY * WHEEL_RADIUS}"
+        h="${INERTIA_MULTIPLY * WHEEL_LENGTH}"
+        xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+
+    </link>
+
+    <joint name="${name}_joint" type="continuous">
+      <parent link="base_link" />
+      <child link="${name}_wheel" />
+      <origin xyz="${-BASE_LENGTH/4} ${y_sign*(BASE_WIDTH + WHEEL_LENGTH) / 2.0} 0.0"
+        rpy="${-pi/2.0} 0 0" />
+      <axis xyz="0 0 1" />
+    </joint>
+  </xacro:macro>
+
+  <link name="base_footprint" />
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="${BASE_LENGTH} ${BASE_WIDTH} ${BASE_HEIGHT} " />
+      </geometry>
+      <origin xyz="0 0 ${BASE_HEIGHT/2.0}" rpy="0 0 0" />
+      <material name="blue" />
+    </visual>
+
+    <collision>
+      <geometry>
+        <box size="${BASE_LENGTH} ${BASE_WIDTH} ${BASE_HEIGHT} " />
+      </geometry>
+      <origin xyz="0 0 ${BASE_HEIGHT/2.0}" rpy="0 0 0" />
+    </collision>
+
+    <xacro:box_inertia m="${BASE_MASS}" l="${INERTIA_MULTIPLY * BASE_LENGTH}"
+      w="${INERTIA_MULTIPLY * BASE_WIDTH}" h="${INERTIA_MULTIPLY * BASE_HEIGHT}"
+      xyz="0 0 ${BASE_HEIGHT/2.0}" rpy="0 0 0" />
+
+  </link>
+
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint" />
+    <child link="base_link" />
+    <origin xyz="0.0 0.0 ${WHEEL_RADIUS}" rpy="0.0 0.0 0.0" />
+    <axis xyz="0.0 1 0.0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="base_scan">
+    <visual>
+      <geometry>
+        <cylinder radius="${SCAN_RADIUS}" length="${SCAN_LENGTH}" />
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <material name="grey" />
+    </visual>
+
+    <collision>
+      <geometry>
+        <cylinder radius="${SCAN_RADIUS}" length="${SCAN_LENGTH}" />
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </collision>
+
+    <xacro:cylinder_inertia m="${SCAN_MASS}" r="${INERTIA_MULTIPLY * SCAN_RADIUS}"
+        h="${INERTIA_MULTIPLY * SCAN_LENGTH}"
+        xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </link>
+
+  <joint name="base_scan_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="base_scan" />
+    <origin xyz="0 0 ${BASE_HEIGHT + SCAN_LENGTH/2.0}" rpy="0 0 0" />
+  </joint>
+
+  <xacro:wheel name="left" y_sign="1" />
+  <xacro:wheel name="right" y_sign="-1" />
+
+  <link name="caster_front">
+    <visual>
+      <geometry>
+        <sphere radius="${WHEEL_RADIUS / 2.0}" />
+      </geometry>
+      <origin xyz="0.0 0.0 0" rpy="0.0 0.0 0.0" />
+      <material name="grey" />
+    </visual>
+
+    <collision>
+      <geometry>
+        <sphere radius="${WHEEL_RADIUS / 2.0}" />
+      </geometry>
+      <origin xyz="0.0 0.0 0" rpy="0.0 0.0 0.0" />
+    </collision>
+
+    <xacro:sphere_inertia m="${CASTER_MASS}" r="${INERTIA_MULTIPLY * WHEEL_RADIUS / 2.0}"
+      xyz="0.0 0.0 0"
+      rpy="0.0 0.0 0.0" />
+
+  </link>
+
+  <joint name="caster_front_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="caster_front" />
+    <origin xyz="0.25 0 ${-WHEEL_RADIUS / 2.0}" />
+  </joint>
+
+  <link name="caster_rear">
+    <visual>
+      <geometry>
+        <sphere radius="${WHEEL_RADIUS / 2.0}" />
+      </geometry>
+      <material name="grey" />
+    </visual>
+
+    <collision>
+      <geometry>
+        <sphere radius="${WHEEL_RADIUS / 2.0}" />
+      </geometry>
+    </collision>
+
+    <xacro:sphere_inertia m="${CASTER_MASS}" r="${INERTIA_MULTIPLY * WHEEL_RADIUS / 2.0}"
+      xyz="0.0 0.0 0"
+      rpy="0.0 0.0 0.0" />
+  </link>
+
+  <joint name="caster_rear_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="caster_rear" />
+    <origin xyz="-0.25 0 ${-WHEEL_RADIUS / 2.0}" />
+  </joint>
+
+</robot>

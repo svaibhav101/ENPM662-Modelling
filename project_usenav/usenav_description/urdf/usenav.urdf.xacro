@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+
+<robot name="my_robot" xmlns:xacro="https://wiki.ros.org/xacro">
+
+    <xacro:include filename="./common_properties.xacro" />
+    
+    <!-- MOBILE -->
+    <xacro:include filename="./mobile/mobile.xacro" />
+    <xacro:include filename="./mobile/mobile_gz.xacro" />
+    
+    <!-- ARM -->
+    <xacro:include filename="./arm/arm.xacro" />
+    <xacro:include filename="./arm/arm_gz.xacro" />
+
+    <!-- Connect Arm to Mobile. -->
+    <joint name="joint1" type="revolute">
+        <parent link="base_link" />
+        <child link="link1" />
+        <origin xyz="0.2 0 0.2" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.14" upper="3.14" effort="100" velocity="1" />
+    </joint>
+
+</robot>

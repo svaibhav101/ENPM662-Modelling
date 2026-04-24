@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+
+<robot name="usenav_mobile" xmlns:xacro="https://wiki.ros.org/xacro">
+
+    <xacro:include filename="../common_properties.xacro" />
+    <xacro:include filename="./mobile.xacro" />
+    <xacro:include filename="./mobile_gz.xacro" />
+
+
+</robot>

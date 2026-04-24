@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <gazebo>
+        <plugin filename="gz-sim-joint-state-publisher-system"
+            name="gz::sim::systems::JointStatePublisher"></plugin>
+
+        <plugin filename="gz-sim-joint-position-controller-system"
+            name="gz::sim::systems::JointPositionController">
+            <joint_name>joint1</joint_name>
+            <topic>joint1_cmd</topic>
+            <p_gain>200</p_gain>
+            <i_gain>0.1</i_gain>
+            <d_gain>10.0</d_gain>
+        </plugin>
+
+        <plugin filename="gz-sim-joint-position-controller-system"
+            name="gz::sim::systems::JointPositionController">
+            <joint_name>joint2</joint_name>
+            <topic>joint2_cmd</topic>
+            <p_gain>1000</p_gain>
+            <i_gain>1.0</i_gain>
+            <d_gain>50.0</d_gain>
+        </plugin>
+
+        <plugin filename="gz-sim-joint-position-controller-system"
+            name="gz::sim::systems::JointPositionController">
+            <joint_name>joint3</joint_name>
+            <topic>joint3_cmd</topic>
+            <p_gain>500</p_gain>
+            <i_gain>0.5</i_gain>
+            <d_gain>20.0</d_gain>
+        </plugin>
+
+        <plugin filename="gz-sim-joint-position-controller-system"
+            name="gz::sim::systems::JointPositionController">
+            <joint_name>joint4</joint_name>
+            <topic>joint4_cmd</topic>
+            <p_gain>100</p_gain>
+            <i_gain>0.1</i_gain>
+            <d_gain>5.0</d_gain>
+        </plugin>
+        
+        <plugin filename="gz-sim-joint-position-controller-system"
+            name="gz::sim::systems::JointPositionController">
+            <joint_name>joint5</joint_name>
+            <topic>joint5_cmd</topic>
+            <p_gain>50</p_gain>
+            <i_gain>0.1</i_gain>
+            <d_gain>1.0</d_gain>
+        </plugin>
+        
+    </gazebo>
+</robot>
